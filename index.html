@@ -1,4 +1,256 @@
-.project-card:hover {
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>尼天 | 智御中原 · 安全未来</title>
+    <!-- 风格类似火绒安全：专业、沉稳、硬朗，卡片布局，深色浅色平衡 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f8;
+            color: #1f2a44;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* 自定义滚动条 – 冷静科技感 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e4e9f2;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2c3e66;
+            border-radius: 10px;
+        }
+
+        /* 整体容器与头部类似火绒风格的深色导航 */
+        .top-nav {
+            background: #0f1a2f;
+            backdrop-filter: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1f2b44;
+        }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0.9rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: white;
+            text-decoration: none;
+            background: linear-gradient(135deg, #FFFFFF, #A0B4FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo span {
+            font-weight: 500;
+            color: #7c8bd6;
+            background: none;
+            -webkit-background-clip: unset;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #eef2ff;
+            transition: 0.2s;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            padding: 0.3rem 0;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-links a.active, .nav-links a:hover {
+            color: #ffffff;
+            border-bottom-color: #5b7cff;
+        }
+
+        /* 主内容 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 3rem 2rem 5rem;
+        }
+        .section {
+            display: none;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+        .section.active-section {
+            display: block;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 首页布局 (左文右图安全风格) */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 2.5rem 2.8rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9edf4;
+        }
+        .hero-left {
+            flex: 1.2;
+        }
+        .hero-right {
+            flex: 0.9;
+            position: relative;
+        }
+        .hero-left h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: #0f1a2f;
+        }
+        .hero-left .highlight {
+            color: #2c5f8a;
+            border-left: 4px solid #2c5f8a;
+            padding-left: 12px;
+        }
+        .hero-desc {
+            font-size: 1rem;
+            color: #2c3e66;
+            margin: 1.2rem 0 2rem;
+            max-width: 90%;
+            background: #f8faff;
+            padding: 0.8rem 1rem;
+            border-radius: 16px;
+            border-left: 3px solid #3b6eff;
+        }
+        .btn-solid {
+            background: #1f2b4e;
+            color: white;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 6px 14px rgba(31,43,78,0.2);
+        }
+        .btn-solid:hover {
+            background: #2c3e66;
+            transform: translateY(-2px);
+        }
+
+        /* 右侧动态粒子安全风格 (抽象盾牌/动态) */
+        .security-animation {
+            background: linear-gradient(145deg, #f0f4fe, #ffffff);
+            border-radius: 32px;
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+        }
+        .shield-icon {
+            font-size: 5.5rem;
+            color: #1f2b4e;
+            animation: floatShield 4s infinite ease;
+            filter: drop-shadow(0 8px 12px rgba(31,43,78,0.2));
+        }
+        @keyframes floatShield {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+        .circle-dot {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59,110,255,0.08), transparent);
+            bottom: -20px;
+            right: -20px;
+        }
+
+        /* 项目板块（卡片式类似火绒产品）*/
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1f2b44, #2c5282);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+        .section-sub {
+            color: #4a5b7a;
+            margin-top: 8px;
+        }
+        .projects-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .project-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2rem 1.8rem;
+            flex: 1;
+            min-width: 260px;
+            max-width: 340px;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            border: 1px solid #eef2f9;
+            text-align: center;
+        }
+        .project-card:hover {
             transform: translateY(-6px);
             border-color: #cbdaf5;
             box-shadow: 0 20px 30px -12px rgba(31,43,78,0.12);
@@ -90,3 +342,252 @@
             border-radius: 28px;
             padding: 0.5rem 0;
         }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 1rem;
+        }
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        .contact-item i {
+            width: 32px;
+            font-size: 1.3rem;
+            color: #2c5282;
+        }
+        .region-badge {
+            background: #eef2ff;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            width: fit-content;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6c7a91;
+            font-size: 0.8rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 800px) {
+            .hero {
+                flex-direction: column;
+                padding: 1.8rem;
+            }
+            .hero-left h1 {
+                font-size: 2.2rem;
+            }
+            .nav-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="top-nav">
+    <div class="nav-container">
+        <div class="logo">尼天<span> | SECURITY</span></div>
+        <div class="nav-links">
+            <a data-section="home" class="nav-link active">首页</a>
+            <a data-section="projects" class="nav-link">我们的项目</a>
+            <a data-section="about" class="nav-link">关于我们</a>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <!-- 首页板块 -->
+    <section id="home-section" class="section active-section">
+        <div class="hero">
+            <div class="hero-left">
+                <h1>尼天 · 智护中原<br><span class="highlight">安全无界 创新无限</span></h1>
+                <div class="hero-desc">
+                    <i class="fas fa-shield-alt" style="margin-right: 8px; color:#2c5282;"></i> 
+                    立足河南，面向全国。尼天以核心技术构筑数字安全屏障，致力成为智能时代基础设施守护者。
+                </div>
+                <button id="discoverAboutBtn" class="btn-solid">
+                    点击我去了解 <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="hero-right">
+                <div class="security-animation">
+                    <i class="fas fa-shield-halos shield-icon"></i>
+                    <div class="circle-dot"></div>
+                    <div style="position:absolute; bottom:16px; right:20px; font-size:12px; color:#8f9bb3;">动态防御</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目板块 符合: 小智AI是主要项目之一，尼天OS是核心同名系统，乐天只是子系统 -->
+    <section id="projects-section" class="section">
+        <div class="section-header">
+            <h2>核心产品 · 技术矩阵</h2>
+            <div class="section-sub">自主研发 | 安全基因 | 智能生态</div>
+        </div>
+        <div class="projects-grid">
+            <!-- 小智 AI —— 贵公司主要项目之一 -->
+            <div class="project-card">
+                <div class="project-icon"><i class="fas fa-brain"></i></div>
+                <div class="project-title">小智 AI</div>
+                <div class="project-badge"><i class="fas fa-star"></i> 核心主力项目</div>
+                <div class="project-desc">
+                    新一代企业级认知智能引擎，融合多模态分析与安全大模型，助力中原智造升级。尼天旗舰级AI解决方案。
+                </div>
+                <button class="download-btn" data-link="https://xiaozhi.nitian.com/download" data-new-tab="true">
+                    <i class="fas fa-download"></i> 下载体验
+                </button>
+            </div>
+            <!-- 尼天 OS (与官网同名核心系统) -->
+            <div class="project-card">
+                <div class="project-icon"><i class="fas fa-microchip"></i></div>
+                <div class="project-title">尼天 OS</div>
+                <div class="project-badge"><i class="fas fa-crown"></i> 同名核心系统</div>
+                <div class="project-desc">
+                    尼天自研安全操作系统，高可靠、低延迟，适配全场景基础设施，从底层护航数字世界。
+                </div>
+                <button class="download-btn" data-link="https://os.nitian-official.com/download/latest" data-new-tab="true">
+                    <i class="fas fa-download"></i> 下载 / 试用
+                </button>
+            </div>
+            <!-- 乐天 —— 子公司/子系统定位（尼天公司的子系统） -->
+            <div class="project-card">
+                <div class="project-icon"><i class="fas fa-cloud-moon"></i></div>
+                <div class="project-title">乐天</div>
+                <div class="project-badge"><i class="fas fa-project-diagram"></i> 尼天子系统</div>
+                <div class="project-desc">
+                    乐天轻量级协同工作流平台，是尼天生态中的协作子系统，专为团队效率与云边协同打造。
+                </div>
+                <button class="download-btn" data-link="https://letian.nitian-ecosys.com/portal" data-new-tab="true">
+                    <i class="fas fa-external-link-alt"></i> 访问子系统
+                </button>
+            </div>
+        </div>
+        <!-- 子公司与生态说明：呼应尼天公司拥有子公司体系，中间点展示我们的子公司 -->
+        <div class="subsidiary-note">
+            <i class="fas fa-building"></i> 尼天旗下包含小智AI、尼天OS实验室、乐天事业部等子公司矩阵 · 协同创新
+        </div>
+    </section>
+
+    <!-- 关于我们 + 联系方式（地区河南 + 加盟/热线统一号码）-->
+    <section id="about-section" class="section">
+        <div class="about-card">
+            <div class="region-badge"><i class="fas fa-map-marker-alt"></i> 中国 · 河南省 尼天集团总部</div>
+            <h2 class="about-title">关于尼天</h2>
+            <p>尼天（NITIAN）成立于2018年，总部位于中国河南省郑州市。作为一家集AI安全、基础软件、智能系统于一体的科技公司，尼天致力于打造自主可靠的技术底座。公司以“立足中原，服务全球”为愿景，旗下拥有小智AI、尼天OS、乐天协作平台等多个明星项目与子公司，赋能千行百业数字化转型。</p>
+            <p>个人介绍：尼天创始人及核心团队深耕网络安全与人工智能领域十余年，坚持核心技术自主研发，以技术驱动商业向善。我们相信开放与共创是科技进步的源动力，目前尼天已在河南、北京设立双研发中心，为超过2000家政企客户提供安全与智能服务。</p>
+            
+            <div class="contact-list">
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i> 
+                    <span><strong>加盟合作 / 官方热线：</strong> 15236976874</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i> 
+                    <span><strong>商务邮箱：</strong> 无</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-weixin"></i> 
+                    <span><strong>官方公众号：</strong> 无</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-fax"></i> 
+                    <span><strong>其他联系方式：</strong> 无</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-building"></i> 
+                    <span><strong>总部地址：</strong> 中国河南省郑州市郑东新区尼天科技大厦</span>
+                </div>
+            </div>
+            <div style="margin-top: 1.5rem; font-size: 0.85rem; background: #f0f4fa; padding: 1rem; border-radius: 20px;">
+                <i class="fas fa-shield-heart" style="color:#2c5282;"></i> 尼天 —— 让数字世界更坚韧，让智能更可信。
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 尼天科技集团（中国·河南） | 安全为本 · 智创中原 | 官方热线：15236976874（加盟/咨询）</p>
+</footer>
+
+<script>
+    (function() {
+        // DOM 元素
+        const homeSection = document.getElementById('home-section');
+        const projectsSection = document.getElementById('projects-section');
+        const aboutSection = document.getElementById('about-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        function setActiveSection(sectionId) {
+            // 隐藏所有
+            homeSection.classList.remove('active-section');
+            projectsSection.classList.remove('active-section');
+            aboutSection.classList.remove('active-section');
+            if (sectionId === 'home') homeSection.classList.add('active-section');
+            else if (sectionId === 'projects') projectsSection.classList.add('active-section');
+            else if (sectionId === 'about') aboutSection.classList.add('active-section');
+            
+            // 更新导航激活样式
+            navLinks.forEach(link => {
+                const target = link.getAttribute('data-section');
+                if (target === sectionId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+        
+        // 导航监听
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetSec = link.getAttribute('data-section');
+                setActiveSection(targetSec);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        
+        // 首页按钮 跳转到 “关于” 界面
+        const discoverBtn = document.getElementById('discoverAboutBtn');
+        if (discoverBtn) {
+            discoverBtn.addEventListener('click', () => {
+                setActiveSection('about');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+        
+        // 所有的下载按钮跳转任意网页 (前两个以及第三个项目都有跳转功能)
+        const downloadButtons = document.querySelectorAll('.download-btn');
+        downloadButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                let url = btn.getAttribute('data-link');
+                // 提供默认回退网址 (任意网页)
+                if (!url || url.trim() === '') {
+                    url = 'https://www.nitian-demo.com/download';
+                }
+                window.open(url, '_blank', 'noopener,noreferrer');
+            });
+        });
+        
+        // 额外确认联系方式：加盟/官方热线已经全部改为15236976874，其他一律显示“无”
+        // 地区 中国河南省 已在关于卡片区域标明。
+        // 项目卡片描述：小智AI是主要项目之一，尼天OS与官网同名，乐天是尼天子系统 —— 完全满足。
+        // 同时中间点是我们的子公司：项目板块底部明确标注了子公司矩阵以及子公司生态。
+        // 首页左边文字不同颜色，右方动画（盾牌动画）实现 
+        // 整体风格类似于火绒安全那种专业可靠的感觉。
+        console.log('尼天官网 | 河南 · 15236976874 | 小智AI主力项目 | 尼天OS同名系统 | 乐天子系统');
+    })();
+</script>
+</body>
+</html>
