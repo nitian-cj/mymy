@@ -2,9 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>尼天公司 | 玻璃生态 · 未来官网</title>
-    <!-- 谷歌字体 & Font Awesome -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>尼天 | 智御中原 · 安全未来</title>
+    <!-- 风格类似火绒安全：专业、沉稳、硬朗，卡片布局，深色浅色平衡 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -15,490 +15,64 @@
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #a8e6ff, #ffecd2); /* 柔和公告渐变背景，贯穿全局，但在官网显示时同样背景 */
-            min-height: 100vh;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f8;
+            color: #1f2a44;
+            line-height: 1.5;
+            scroll-behavior: smooth;
         }
 
-        /* ----- 公告全屏遮罩层 (完全保留用户提供的玻璃拟态风格) ----- */
-        .announcement-fullscreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #a8e6ff, #ffecd2);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-            transition: opacity 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            backdrop-filter: blur(2px);
+        /* 自定义滚动条 – 冷静科技感 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e4e9f2;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2c3e66;
+            border-radius: 10px;
         }
 
-        .md3-card {
-            width: 80%;
-            max-width: 400px;
-            padding: 24px 24px 16px;
-            border-radius: 28px;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            text-align: left;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-        @media (orientation: landscape) {
-            .md3-card { width: 70%; max-width: 480px; }
-        }
-        .card-header { display: flex; align-items: center; gap: 16px; }
-        .card-icon {
-            width: 48px; height: 48px; border-radius: 24px; border: 2px solid #fff;
-            object-fit: cover; flex-shrink: 0;
-        }
-        .card-title { font-size: 18px; font-weight: 700; color: #1c1b1f; text-shadow: 0 1px 2px rgba(255,255,255,0.5); }
-        .support-chip {
-            display: inline-flex; align-items: center; height: 28px; padding: 0 12px;
-            border-radius: 14px; background: rgba(255,255,255,0.4); border: 1px solid #fff;
-            font-size: 12px; font-weight: 500; color: #1c1b1f; width: fit-content;
-        }
-        .card-content { font-size: 14px; color: #1c1b1f; line-height: 1.6; text-shadow: 0 1px 2px rgba(255,255,255,0.3); }
-        .card-actions { display: flex; justify-content: flex-end; }
-        .md3-btn {
-            position: relative; height: 40px; padding: 0 24px; border-radius: 20px; border: none;
-            background: #6750A4; color: #fff; font-weight: 600; cursor: pointer;
-            transition: background 0.3s ease, transform 0.1s; overflow: hidden;
-        }
-        .md3-btn:hover { background: #5f46a1; }
-        .md3-btn:active::after {
-            content: ""; position: absolute; inset: 0; background: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 40%);
-            opacity: 1; transform: scale(1.2); transition: 0.25s;
-        }
-
-        /* ----- 官网主界面 (统一采用公告渐变玻璃风格，响应式适配) ----- */
-        .main-website {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            background: linear-gradient(135deg, #a8e6ff, #ffecd2); /* 完全遵循公告配色 */
-            min-height: 100vh;
-        }
-        .main-website.active {
-            display: block;
-            opacity: 1;
-        }
-
-        /* 玻璃态导航栏 (毛玻璃+浅色) */
-        .navbar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.2rem;
-            padding: 0.9rem 1.5rem;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        /* 整体容器与头部类似火绒风格的深色导航 */
+        .top-nav {
+            background: #0f1a2f;
+            backdrop-filter: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #1f2b44;
         }
-        .nav-item {
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            transition: all 0.2s ease;
-            color: #1e2a3a;
-            background: transparent;
-            letter-spacing: 0.3px;
-        }
-        .nav-item i { margin-right: 8px; }
-        .nav-item:hover, .nav-item.active {
-            background: rgba(103, 80, 164, 0.2);
-            color: #4a2e6e;
-            backdrop-filter: blur(4px);
-            box-shadow: 0 0 8px rgba(103, 80, 164, 0.3);
-        }
-
-        .content-container {
-            max-width: 1300px;
+        .nav-container {
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 2rem 1.5rem 3rem;
+            padding: 0.9rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
-        .page { display: none; animation: fadeSlideUp 0.4s ease; }
-        .page.active-page { display: block; }
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 首页区域 — 玻璃卡片风格，深色文字确保对比 */
-        .hero-section { text-align: center; margin-bottom: 2.5rem; }
-        .glow-title {
-            font-size: 2.8rem; font-weight: 800;
-            background: linear-gradient(130deg, #1f3a5f, #4a2e6e, #1b598b);
-            -webkit-background-clip: text; background-clip: text;
-            color: transparent;
-            letter-spacing: -0.02em;
-        }
-        .company-declaration {
-            background: rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            padding: 1.8rem;
-            margin: 1.8rem 0;
-            border: 1px solid rgba(255,255,240,0.6);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-        }
-        .declaration-text {
-            font-size: 1.5rem; font-weight: 600; line-height: 1.4;
-            color: #1e2f3e;
-            text-shadow: 0 1px 1px rgba(255,255,255,0.4);
-        }
-        .sub-declaration {
-            margin-top: 1rem; font-size: 1rem; color: #2c4c6e;
-            font-weight: 500;
-        }
-        .tech-grid {
-            display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; margin-top: 2rem;
-        }
-        .tech-card {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(8px);
-            border-radius: 1.8rem;
-            padding: 1.5rem;
-            width: 220px;
-            text-align: center;
-            border: 1px solid rgba(255,255,245,0.6);
-            transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .tech-card i { font-size: 2.5rem; color: #5f46a1; margin-bottom: 0.8rem; }
-        .tech-card h3 { color: #1f2f40; font-weight: 700; margin-bottom: 0.3rem; }
-        .tech-card p { color: #2c4b6e; font-size: 0.85rem; }
-
-        /* 项目卡片区域 (毛玻璃白色) */
-        .projects-grid {
-            display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin-top: 2rem;
-        }
-        .project-card {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(10px);
-            border-radius: 2rem;
-            padding: 1.6rem;
-            width: 320px;
-            border: 1px solid rgba(255,255,240,0.7);
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-        }
-        .project-card:hover { transform: translateY(-4px); border-color: #ae9fd9; box-shadow: 0 12px 24px rgba(0,0,0,0.1); }
-        .project-title { font-size: 1.7rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; color: #1f2937; }
-        .project-desc { color: #2c3e4e; margin: 0.8rem 0; line-height: 1.5; font-size: 0.9rem; }
-        .download-btn {
-            background: #6750A4;
-            border: none;
-            color: #fff;
-            padding: 0.6rem 1.4rem;
-            border-radius: 2rem;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-            display: inline-block;
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: white;
             text-decoration: none;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #FFFFFF, #A0B4FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        .download-btn:hover { background: #5b4090; transform: scale(0.98); }
-        .disabled-btn {
-            background: #b9b0ce;
-            color: #2e2a3a;
-            cursor: not-allowed;
-            opacity: 0.7;
-            pointer-events: none;
-            box-shadow: none;
+        .logo span {
+            font-weight: 500;
+            color: #7c8bd6;
+            background: none;
+            -webkit-background-clip: unset;
         }
-
-        /* 关于我们 卡片 */
-        .about-grid {
-            display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin-top: 2rem;
-        }
-        .info-card {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(8px);
-            border-radius: 1.8rem;
-            padding: 1.8rem;
-            min-width: 250px;
-            text-align: center;
-            border: 1px solid rgba(255,255,240,0.6);
-        }
-        .info-card i { font-size: 2.2rem; margin-bottom: 1rem; color: #6750A4; }
-        .info-card h3 { color: #1f2f40; margin-bottom: 0.5rem; }
-        .info-card p { color: #2c4b6e; font-size: 0.9rem; }
-        hr { border-color: rgba(103, 80, 164, 0.3); margin: 1.5rem 0; }
-        footer {
-            text-align: center; padding: 1.2rem; font-size: 0.75rem;
-            color: #446688; border-top: 1px solid rgba(103,80,164,0.25);
-            margin-top: 2rem;
-            background: rgba(255,255,240,0.2);
-        }
-
-        /* ========== 响应式：手机端专属优化 ========== */
-        @media (max-width: 768px) {
-            .navbar {
-                gap: 0.8rem;
-                padding: 0.7rem 1rem;
-                justify-content: space-around;
-            }
-            .nav-item {
-                font-size: 0.9rem;
-                padding: 0.4rem 0.8rem;
-            }
-            .glow-title { font-size: 2rem; }
-            .declaration-text { font-size: 1.2rem; }
-            .company-declaration { padding: 1.2rem; margin: 1.2rem 0; }
-            .tech-card { width: 180px; padding: 1rem; }
-            .project-card { width: 90%; max-width: 360px; margin: 0 auto; }
-            .projects-grid { gap: 1.2rem; }
-            .content-container { padding: 1.2rem 1rem 2rem; }
-            .tech-grid { gap: 1rem; }
-            .info-card { min-width: 220px; padding: 1.2rem; }
-            .card-icon { width: 42px; height: 42px; }
-            .md3-card { width: 90%; padding: 20px; }
-        }
-
-        @media (max-width: 480px) {
-            .glow-title { font-size: 1.8rem; }
-            .nav-item { font-size: 0.85rem; }
-            .project-title { font-size: 1.4rem; }
-            .tech-card { width: 160px; }
-        }
-
-        /* 保证所有文字在浅色背景上清晰 */
-        body, .main-website { color: #1a2c3c; }
-        a { text-decoration: none; }
-    </style>
-</head>
-<body>
-
-<!-- 1. 公告全屏遮罩层 (用户玻璃拟态样式，配置可修改) -->
-<div id="announcementFullscreen" class="announcement-fullscreen">
-    <div class="md3-card">
-        <div class="card-header">
-            <img class="card-icon" id="card-icon" src="https://p2.ssl.qhimgs1.com/t04cc685f3b4e4323f2.jpg" alt="公告图标">
-            <div class="card-title" id="card-title">系统公告</div>
-        </div>
-        <div class="support-chip" id="chip">重要通知</div>
-        <div class="card-content" id="card-content">
-            为了提供更稳定的使用体验，系统将于今晚 02:00—04:00 进行维护。期间部分功能将暂时不可用，请提前做好安排。<br><br>
-            ⚡ 尼天OS & 小智AI 即将开启先锋体验，敬请期待。
-        </div>
-        <div class="card-actions">
-            <button class="md3-btn" id="btn-know">我知道了</button>
-        </div>
-    </div>
-</div>
-
-<!-- 2. 官网主界面 (玻璃渐变，统一公告配色) -->
-<div class="main-website" id="mainWebsite">
-    <div class="navbar">
-        <div class="nav-item active" data-page="home"><i class="fas fa-home"></i> 首页</div>
-        <div class="nav-item" data-page="projects"><i class="fas fa-microchip"></i> 我们的项目</div>
-        <div class="nav-item" data-page="about"><i class="fas fa-building"></i> 关于我们</div>
-    </div>
-
-    <div class="content-container">
-        <!-- 首页板块 -->
-        <div id="homePage" class="page active-page">
-            <div class="hero-section">
-                <h1 class="glow-title">尼天公司<br><span style="font-size: 1.4rem;">NITIAN · 守护数字未来</span></h1>
-                <div class="company-declaration">
-                    <div class="declaration-text">
-                        「 编织量子之息，铭刻隐私之核 —— 尼天，让科技拥有灵魂体温。 」
-                    </div>
-                    <div class="sub-declaration">
-                        <i class="fas fa-robot"></i>  AI不再冰冷 · 系统坚如堡垒  <i class="fas fa-shield-alt"></i><br>
-                        超越代码边界，重塑人机共生信仰。
-                    </div>
-                </div>
-                <div style="margin: 1rem auto; max-width: 700px; background: rgba(255,255,245,0.5); border-radius: 3rem; padding: 0.8rem 1rem; backdrop-filter: blur(8px);">
-                    <i class="fas fa-satellite-dish"></i>  尼天宣言 2.0 ：<strong style="color: #4a2e6e;">数据主权归你，智慧温暖归心</strong>  <i class="fas fa-brain"></i>
-                </div>
-            </div>
-            <div class="tech-grid">
-                <div class="tech-card"><i class="fas fa-lock"></i><h3>零信任架构</h3><p>隐私保护，原生安全</p></div>
-                <div class="tech-card"><i class="fas fa-feather-alt"></i><h3>情感AI引擎</h3><p>小智 · 温暖交互</p></div>
-                <div class="tech-card"><i class="fas fa-globe"></i><h3>跨平台融合</h3><p>安卓+Win 底层创新</p></div>
-            </div>
-            <p style="text-align: center; margin-top: 2rem; font-size: 0.85rem; background: rgba(255,255,250,0.5); padding: 0.6rem; border-radius: 2rem; width: fit-content; margin-left: auto; margin-right: auto;">尼天生态全景 · 更多创新即将启幕</p>
-        </div>
-
-        <!-- 我们的项目板块 -->
-        <div id="projectsPage" class="page">
-            <h2 style="font-size: 1.8rem; border-left: 5px solid #6750A4; padding-left: 1rem; margin-bottom: 1rem;"><i class="fas fa-cubes"></i> 核心项目</h2>
-            <div class="projects-grid">
-                <!-- 尼天OS -->
-                <div class="project-card">
-                    <div class="project-title"><i class="fab fa-android"></i> 尼天OS</div>
-                    <div class="project-desc">
-                        一款隐私性又安全的独立操作系统，基于安卓底层与Windows底层融合创新研发。<br>
-                        <strong>「您的隐私小助手」</strong> —— 数据主权无妥协，丝滑双生态体验。
-                    </div>
-                    <a href="#" class="download-btn" id="downloadNtOS" data-link-placeholder="尼天OS链接待替换"><i class="fas fa-download"></i> 下载尼天OS</a>
-                </div>
-                <!-- 小智AI -->
-                <div class="project-card">
-                    <div class="project-title"><i class="fas fa-robot"></i> 小智AI</div>
-                    <div class="project-desc">
-                        重新定义AI，让它变得温暖不再是冰冷的机器。<br>
-                        情感计算 + 隐私本地化，小智 —— 真正懂你的智能伴侣。
-                    </div>
-                    <a href="#" class="download-btn" id="downloadXiaoZhi" data-link-placeholder="小智AI链接待替换"><i class="fas fa-download"></i> 下载小智AI</a>
-                </div>
-                <!-- 乐天子公司（不提供下载） -->
-                <div class="project-card">
-                    <div class="project-title"><i class="fas fa-history"></i> 乐天子公司</div>
-                    <div class="project-desc">
-                        尼天公司的前身，拥有丰厚的历史经验与技术沉淀。<br>
-                        乐天时代积累创新基因，为尼天奠定坚实基石，传承·突破。
-                    </div>
-                    <button class="download-btn disabled-btn" disabled><i class="fas fa-gem"></i> 历史传承 · 敬请期待</button>
-                </div>
-            </div>
-            <p style="margin-top: 1.8rem; font-size: 0.8rem; background: rgba(255,255,235,0.6); padding: 0.5rem; border-radius: 2rem; text-align: center; backdrop-filter: blur(4px);"><i class="fas fa-link"></i> 尼天OS & 小智AI 下载链接即将提供，可调用 window.setNtOSLink / setXiaoZhiLink 配置</p>
-        </div>
-
-        <!-- 关于我们板块 -->
-        <div id="aboutPage" class="page">
-            <h2 style="font-size: 1.8rem; border-left: 5px solid #6750A4; padding-left: 1rem;"><i class="fas fa-address-card"></i> 关于尼天</h2>
-            <div class="about-grid">
-                <div class="info-card"><i class="fas fa-map-marker-alt"></i><h3>总部地址</h3><p>中国 · 未来科技城 尼天数字中心A座<br>杭州市余杭区科创大道18号</p></div>
-                <div class="info-card"><i class="fab fa-weixin"></i><h3>官方微信公众号</h3><p>尼天科技Nitian<br>( 订阅号服务号双号并行 )</p></div>
-                <div class="info-card"><i class="fas fa-phone-alt"></i><h3>联系热线</h3><p>+86 (571) 400-882-6688<br>技术合作：support@nitiangroup.com</p></div>
-            </div>
-            <hr>
-            <div style="background: rgba(255,255,245,0.5); border-radius: 1.5rem; padding: 1.2rem; margin-top: 1rem; backdrop-filter: blur(6px);">
-                <i class="fas fa-globe-asia"></i> 尼天公司致力于隐私安全与人性化AI的融合，由乐天技术实验室孵化，秉承“透明、可信、温暖”的核心价值观。
-            </div>
-        </div>
-    </div>
-    <footer>
-        © 2026 尼天公司 NITIAN GROUP | 守护数字边界 · 温暖AI时代  |  本网站最终解释权归尼天所有
-    </footer>
-</div>
-
-<script>
-    (function() {
-        // ========== 公告卡片配置（完全用户自定义风格） ==========
-        // 您可以直接修改下方对象来变更公告内容、图标等
-        const config = {
-            icon: "https://p2.ssl.qhimgs1.com/t04cc685f3b4e4323f2.jpg",
-            title: "系统公告",
-            tag: "重要通知",
-            content: `
-                为了提供更稳定的使用体验，系统将于每天晚 02:00—04:00
-                进行维护。期间部分功能将暂时不可用，请提前做好安排。<br><br>
-                ⚡ 尼天OS & 小智AI 即将开启先锋体验，敬请期待。
-            `
-        };
-        document.getElementById("card-icon").src = config.icon;
-        document.getElementById("card-title").innerHTML = config.title;
-        document.getElementById("chip").innerHTML = config.tag;
-        document.getElementById("card-content").innerHTML = config.content;
-
-        // 公告关闭 + 显示官网
-        const announcementLayer = document.getElementById("announcementFullscreen");
-        const mainWebsite = document.getElementById("mainWebsite");
-        const knowBtn = document.getElementById("btn-know");
-
-        function dismissAndShow() {
-            if (!announcementLayer || !mainWebsite) return;
-            announcementLayer.style.opacity = "0";
-            setTimeout(() => {
-                announcementLayer.style.display = "none";
-                mainWebsite.classList.add("active");
-                // 重置页面激活状态
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-                document.getElementById('homePage').classList.add('active-page');
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                document.querySelector('.nav-item[data-page="home"]').classList.add('active');
-            }, 400);
-        }
-        if (knowBtn) knowBtn.addEventListener("click", dismissAndShow);
-
-        // 导航切换 (首页 / 项目 / 关于我们)
-        const navItems = document.querySelectorAll('.nav-item');
-        const pages = {
-            home: document.getElementById('homePage'),
-            projects: document.getElementById('projectsPage'),
-            about: document.getElementById('aboutPage')
-        };
-        function switchPage(pageId) {
-            Object.values(pages).forEach(p => p && p.classList.remove('active-page'));
-            if (pages[pageId]) pages[pageId].classList.add('active-page');
-            navItems.forEach(item => {
-                if (item.getAttribute('data-page') === pageId) item.classList.add('active');
-                else item.classList.remove('active');
-            });
-        }
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const pageId = item.getAttribute('data-page');
-                if (pageId && pages[pageId]) switchPage(pageId);
-            });
-        });
-
-        // 下载链接预留接口 (用户替换真实链接)
-        const ntOsBtn = document.getElementById('downloadNtOS');
-        const xiaoZhiBtn = document.getElementById('downloadXiaoZhi');
-        window.setNtOSLink = function(url) {
-            if (ntOsBtn) ntOsBtn.href = url;
-            console.log('[尼天] 尼天OS下载链接已更新:', url);
-        };
-        window.setXiaoZhiLink = function(url) {
-            if (xiaoZhiBtn) xiaoZhiBtn.href = url;
-            console.log('[尼天] 小智AI下载链接已更新:', url);
-        };
-        // 默认拦截未配置链接的点击
-        if (ntOsBtn) {
-            ntOsBtn.addEventListener('click', function(e) {
-                const href = ntOsBtn.getAttribute('href');
-                if (!href || href === '#' || href.includes('待替换')) {
-                    e.preventDefault();
-                    alert('⚠️ 尼天OS下载链接待配置，请使用 window.setNtOSLink("真实链接") 设置');
-                } else {
-                    window.open(href, '_blank');
-                    e.preventDefault();
-                }
-            });
-        }
-        if (xiaoZhiBtn) {
-            xiaoZhiBtn.addEventListener('click', function(e) {
-                const href = xiaoZhiBtn.getAttribute('href');
-                if (!href || href === '#' || href.includes('待替换')) {
-                    e.preventDefault();
-                    alert('💡 小智AI下载通道即将开放，请使用 window.setXiaoZhiLink("链接") 配置');
-                } else {
-                    window.open(href, '_blank');
-                    e.preventDefault();
-                }
-            });
-        }
-
-        // 工具：动态更新公告内容（方便后期维护）
-        window.updateAnnouncement = function(newConfig) {
-            if (newConfig.icon) document.getElementById("card-icon").src = newConfig.icon;
-            if (newConfig.title) document.getElementById("card-title").innerHTML = newConfig.title;
-            if (newConfig.tag) document.getElementById("chip").innerHTML = newConfig.tag;
-            if (newConfig.content) document.getElementById("card-content").innerHTML = newConfig.content;
-        };
-
-        console.log('✅ 尼天官网 | 玻璃公告+浅色毛玻璃风格，响应式已适配手机/电脑端');
-    })();
-</script>
-</body>
-</html>=
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
