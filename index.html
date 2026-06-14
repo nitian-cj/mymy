@@ -1,78 +1,92 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>尼天 | 智御中原 · 安全未来</title>
-    <!-- 风格类似火绒安全：专业、沉稳、硬朗，卡片布局，深色浅色平衡 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+.project-card:hover {
+            transform: translateY(-6px);
+            border-color: #cbdaf5;
+            box-shadow: 0 20px 30px -12px rgba(31,43,78,0.12);
         }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f0f2f8;
-            color: #1f2a44;
-            line-height: 1.5;
-            scroll-behavior: smooth;
-        }
-
-        /* 自定义滚动条 – 冷静科技感 */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #e4e9f2;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2c3e66;
-            border-radius: 10px;
-        }
-
-        /* 整体容器与头部类似火绒风格的深色导航 */
-        .top-nav {
-            background: #0f1a2f;
-            backdrop-filter: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #1f2b44;
-        }
-        .nav-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0.9rem 2rem;
+        .project-icon {
+            font-size: 2.8rem;
+            background: #eef3fc;
+            width: 80px;
+            height: 80px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
+            justify-content: center;
+            border-radius: 28px;
+            margin: 0 auto 1.2rem;
+            color: #2c5282;
         }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+        .project-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .project-badge {
+            font-size: 0.7rem;
+            background: #eef2ff;
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #2c5f8a;
+            margin-bottom: 1rem;
+        }
+        .project-desc {
+            color: #2d3a5e;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.9rem;
+        }
+        .download-btn {
+            background: white;
+            border: 1.5px solid #2c5282;
+            padding: 0.6rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #2c5282;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+        .download-btn:hover {
+            background: #1f2b4e;
+            border-color: #1f2b4e;
             color: white;
-            text-decoration: none;
-            background: linear-gradient(135deg, #FFFFFF, #A0B4FF);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
         }
-        .logo span {
+
+        /* 子公司/生态声明 */
+        .subsidiary-note {
+            background: #eef2ff;
+            text-align: center;
+            margin: 2.5rem auto 0;
+            width: fit-content;
+            padding: 0.5rem 2rem;
+            border-radius: 100px;
             font-weight: 500;
-            color: #7c8bd6;
-            background: none;
-            -webkit-background-clip: unset;
+            font-size: 0.85rem;
+            color: #1e3a6b;
         }
-        .nav-links {
-            display: flex;
-            gap: 2.2rem;
+
+        /* 关于我们 + 联系方式 (修改地区河南 + 指定电话) */
+        .about-card {
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 2.5rem;
+            max-width: 860px;
+            margin: 0 auto;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+            border: 1px solid #eef2f9;
+        }
+        .about-title {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #0f1a2f;
+        }
+        .contact-list {
+            margin-top: 1.8rem;
+            background: #fafcff;
+            border-radius: 28px;
+            padding: 0.5rem 0;
+        }
