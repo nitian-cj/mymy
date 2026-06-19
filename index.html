@@ -1,593 +1,1132 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>尼天 | 智御中原 · 安全未来</title>
-    <!-- 风格类似火绒安全：专业、沉稳、硬朗，卡片布局，深色浅色平衡 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>尼天创新驱动 · 科技前沿</title>
+    <!-- Font Awesome 6 免费图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
+        /* ===== 全局重置 & 基础 ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f0f2f8;
-            color: #1f2a44;
-            line-height: 1.5;
-            scroll-behavior: smooth;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap');
+
+        :root {
+            --bg-primary: #060a13;
+            --bg-secondary: #0d1628;
+            --bg-card: rgba(18, 32, 58, 0.55);
+            --border-glow: rgba(0, 212, 255, 0.25);
+            --text-primary: #f0f4ff;
+            --text-secondary: #8899bb;
+            --text-accent: #00d4ff;
+            --text-accent2: #7b5cfc;
+            --shadow-glow: 0 0 30px rgba(0, 212, 255, 0.08);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* 自定义滚动条 – 冷静科技感 */
-        ::-webkit-scrollbar {
+        html,
+        body {
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            scroll-behavior: smooth;
+            overflow: hidden;
+        }
+
+        /* ===== 背景动态粒子层 ===== */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== 主容器 ===== */
+        .app {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+        }
+
+        /* ===== 左侧边栏 ===== */
+        .sidebar {
+            width: 280px;
+            min-width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(0, 212, 255, 0.08);
+            backdrop-filter: blur(16px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 24px 32px;
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 4px 0 40px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--text-accent), transparent);
+            opacity: 0.25;
+        }
+
+        /* 头像 */
+        .avatar-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin-bottom: 22px;
+            flex-shrink: 0;
+        }
+
+        .avatar-wrapper .ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, var(--text-accent), var(--text-accent2), var(--text-accent));
+            opacity: 0.6;
+            animation: spin-ring 8s linear infinite;
+            filter: blur(2px);
+        }
+
+        @keyframes spin-ring {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .avatar-wrapper img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(0, 212, 255, 0.3);
+            background: #0a1628;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.15);
+            transition: var(--transition);
+            z-index: 1;
+        }
+
+        .avatar-wrapper img:hover {
+            transform: scale(1.03);
+            border-color: var(--text-accent);
+            box-shadow: 0 0 60px rgba(0, 212, 255, 0.25);
+        }
+
+        /* 姓名 + 职位 */
+        .sidebar .name {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--text-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+            text-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .sidebar .title {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            letter-spacing: 3px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .sidebar .title span {
+            color: var(--text-accent);
+            font-weight: 600;
+        }
+
+        /* 导航菜单 */
+        .nav-menu {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            border: 1px solid transparent;
+            background: transparent;
+            position: relative;
+        }
+
+        .nav-item i {
+            width: 24px;
+            font-size: 18px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover {
+            background: rgba(0, 212, 255, 0.06);
+            color: var(--text-primary);
+            border-color: rgba(0, 212, 255, 0.08);
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 212, 255, 0.10);
+            color: var(--text-accent);
+            border-color: rgba(0, 212, 255, 0.20);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.04);
+        }
+
+        .nav-item.active i {
+            color: var(--text-accent);
+        }
+
+        .nav-item .indicator {
+            position: absolute;
+            right: 16px;
             width: 6px;
             height: 6px;
+            border-radius: 50%;
+            background: var(--text-accent);
+            opacity: 0;
+            transition: var(--transition);
         }
-        ::-webkit-scrollbar-track {
-            background: #e4e9f2;
-            border-radius: 10px;
+
+        .nav-item.active .indicator {
+            opacity: 1;
+            box-shadow: 0 0 16px var(--text-accent);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #2c3e66;
+
+        /* 底部社交链接 (侧栏) */
+        .sidebar-footer {
+            width: 100%;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: auto;
+        }
+
+        .sidebar-footer a {
+            color: var(--text-secondary);
+            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .sidebar-footer a:hover {
+            color: var(--text-accent);
+            transform: translateY(-2px);
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        /* ===== 右侧内容区 ===== */
+        .main-content {
+            flex: 1;
+            padding: 40px 48px 40px 48px;
+            overflow-y: auto;
+            position: relative;
+            background: radial-gradient(ellipse at 30% 20%, rgba(0, 212, 255, 0.02) 0%, transparent 70%);
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.25);
             border-radius: 10px;
         }
 
-        /* 整体容器与头部类似火绒风格的深色导航 */
-        .top-nav {
-            background: #0f1a2f;
-            backdrop-filter: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #1f2b44;
-        }
-        .nav-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0.9rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: white;
-            text-decoration: none;
-            background: linear-gradient(135deg, #FFFFFF, #A0B4FF);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .logo span {
-            font-weight: 500;
-            color: #7c8bd6;
-            background: none;
-            -webkit-background-clip: unset;
-        }
-        .nav-links {
-            display: flex;
-            gap: 2.2rem;
-            align-items: center;
-        }
-        .nav-links a {
-            text-decoration: none;
-            font-weight: 600;
-            color: #eef2ff;
-            transition: 0.2s;
-            font-size: 0.95rem;
-            letter-spacing: 0.3px;
-            cursor: pointer;
-            padding: 0.3rem 0;
-            border-bottom: 2px solid transparent;
-        }
-        .nav-links a.active, .nav-links a:hover {
-            color: #ffffff;
-            border-bottom-color: #5b7cff;
-        }
-
-        /* 主内容 */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 3rem 2rem 5rem;
-        }
-        .section {
+        /* 页面切换容器 */
+        .page {
             display: none;
-            animation: fadeInUp 0.4s ease forwards;
+            animation: fadeSlideUp 0.5s ease forwards;
         }
-        .section.active-section {
+
+        .page.active {
             display: block;
         }
-        @keyframes fadeInUp {
-            from {
+
+        @keyframes fadeSlideUp {
+            0% {
                 opacity: 0;
                 transform: translateY(18px);
             }
-            to {
+            100% {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        /* 首页布局 (左文右图安全风格) */
-        .hero {
+        /* ===== 首页 ===== */
+        .home-hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 70vh;
+            padding: 10px 0;
+        }
+
+        .home-hero .greeting {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .home-hero .greeting i {
+            color: var(--text-accent);
+            margin-right: 10px;
+        }
+
+        .home-hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .home-hero .subhead {
+            font-size: 22px;
+            font-weight: 300;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .home-hero .subhead strong {
+            color: var(--text-accent);
+            font-weight: 600;
+            -webkit-text-fill-color: var(--text-accent);
+        }
+
+        .home-hero .tagline {
             display: flex;
             flex-wrap: wrap;
-            gap: 3rem;
-            align-items: center;
-            background: #ffffff;
-            border-radius: 28px;
-            padding: 2.5rem 2.8rem;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e9edf4;
-        }
-        .hero-left {
-            flex: 1.2;
-        }
-        .hero-right {
-            flex: 0.9;
-            position: relative;
-        }
-        .hero-left h1 {
-            font-size: 3.2rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-            color: #0f1a2f;
-        }
-        .hero-left .highlight {
-            color: #2c5f8a;
-            border-left: 4px solid #2c5f8a;
-            padding-left: 12px;
-        }
-        .hero-desc {
-            font-size: 1rem;
-            color: #2c3e66;
-            margin: 1.2rem 0 2rem;
-            max-width: 90%;
-            background: #f8faff;
-            padding: 0.8rem 1rem;
-            border-radius: 16px;
-            border-left: 3px solid #3b6eff;
-        }
-        .btn-solid {
-            background: #1f2b4e;
-            color: white;
-            border: none;
-            padding: 0.85rem 2rem;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            box-shadow: 0 6px 14px rgba(31,43,78,0.2);
-        }
-        .btn-solid:hover {
-            background: #2c3e66;
-            transform: translateY(-2px);
-        }
-
-        /* 右侧动态粒子安全风格 (抽象盾牌/动态) */
-        .security-animation {
-            background: linear-gradient(145deg, #f0f4fe, #ffffff);
-            border-radius: 32px;
-            height: 280px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
-            border: 1px solid #e2e8f0;
-        }
-        .shield-icon {
-            font-size: 5.5rem;
-            color: #1f2b4e;
-            animation: floatShield 4s infinite ease;
-            filter: drop-shadow(0 8px 12px rgba(31,43,78,0.2));
-        }
-        @keyframes floatShield {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-            100% { transform: translateY(0px); }
-        }
-        .circle-dot {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(59,110,255,0.08), transparent);
-            bottom: -20px;
-            right: -20px;
-        }
-
-        /* 项目板块（卡片式类似火绒产品）*/
-        .section-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-        .section-header h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1f2b44, #2c5282);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-        .section-sub {
-            color: #4a5b7a;
+            gap: 14px 28px;
             margin-top: 8px;
         }
-        .projects-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-        .project-card {
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 2rem 1.8rem;
-            flex: 1;
-            min-width: 260px;
-            max-width: 340px;
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
-            border: 1px solid #eef2f9;
-            text-align: center;
-        }
-        .project-card:hover {
-            transform: translateY(-6px);
-            border-color: #cbdaf5;
-            box-shadow: 0 20px 30px -12px rgba(31,43,78,0.12);
-        }
-        .project-icon {
-            font-size: 2.8rem;
-            background: #eef3fc;
-            width: 80px;
-            height: 80px;
+
+        .home-hero .tagline span {
             display: flex;
             align-items: center;
-            justify-content: center;
-            border-radius: 28px;
-            margin: 0 auto 1.2rem;
-            color: #2c5282;
-        }
-        .project-title {
-            font-size: 1.7rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        .project-badge {
-            font-size: 0.7rem;
-            background: #eef2ff;
-            display: inline-block;
-            padding: 0.2rem 1rem;
-            border-radius: 40px;
-            font-weight: 600;
-            color: #2c5f8a;
-            margin-bottom: 1rem;
-        }
-        .project-desc {
-            color: #2d3a5e;
-            margin: 1rem 0 1.5rem;
-            font-size: 0.9rem;
-        }
-        .download-btn {
-            background: white;
-            border: 1.5px solid #2c5282;
-            padding: 0.6rem 1.6rem;
-            border-radius: 40px;
-            font-weight: 600;
-            color: #2c5282;
-            cursor: pointer;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-        }
-        .download-btn:hover {
-            background: #1f2b4e;
-            border-color: #1f2b4e;
-            color: white;
+            gap: 10px;
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 0.3px;
         }
 
-        /* 子公司/生态声明 */
-        .subsidiary-note {
-            background: #eef2ff;
-            text-align: center;
-            margin: 2.5rem auto 0;
-            width: fit-content;
-            padding: 0.5rem 2rem;
-            border-radius: 100px;
+        .home-hero .tagline span i {
+            color: var(--text-accent);
+            font-size: 16px;
+            opacity: 0.7;
+        }
+
+        .home-hero .tagline .highlight {
+            color: var(--text-primary);
             font-weight: 500;
-            font-size: 0.85rem;
-            color: #1e3a6b;
         }
 
-        /* 关于我们 + 联系方式 (修改地区河南 + 指定电话) */
-        .about-card {
-            background: #ffffff;
-            border-radius: 32px;
-            padding: 2.5rem;
-            max-width: 860px;
-            margin: 0 auto;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.04);
-            border: 1px solid #eef2f9;
+        /* ===== 作品板块 ===== */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            margin-top: 24px;
         }
-        .about-title {
-            font-size: 1.9rem;
+
+        .work-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 212, 255, 0.08);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--text-accent), var(--text-accent2), var(--text-accent));
+            opacity: 0.4;
+            transition: var(--transition);
+        }
+
+        .work-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(0, 212, 255, 0.25);
+            box-shadow: 0 12px 60px rgba(0, 212, 255, 0.08);
+        }
+
+        .work-card:hover::before {
+            opacity: 1;
+            height: 3px;
+        }
+
+        .work-card .icon {
+            font-size: 40px;
+            color: var(--text-accent);
+            margin-bottom: 16px;
+            display: inline-block;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.15));
+        }
+
+        .work-card h3 {
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 1rem;
-            color: #0f1a2f;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
         }
-        .contact-list {
-            margin-top: 1.8rem;
-            background: #fafcff;
-            border-radius: 28px;
-            padding: 0.5rem 0;
+
+        .work-card h3 span {
+            color: var(--text-accent);
         }
+
+        .work-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .work-card .badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(0, 212, 255, 0.08);
+            color: var(--text-accent);
+            border: 1px solid rgba(0, 212, 255, 0.12);
+        }
+
+        .work-card .badge i {
+            margin-right: 6px;
+            font-size: 11px;
+        }
+
+        /* ===== 关于我们 ===== */
+        .about-section {
+            max-width: 780px;
+        }
+
+        .about-section .about-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .about-section .about-title i {
+            color: var(--text-accent);
+            margin-right: 12px;
+        }
+
+        .about-section .about-bio {
+            font-size: 17px;
+            line-height: 2;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            padding: 32px 36px;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(0, 212, 255, 0.06);
+            margin: 20px 0 32px;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+        }
+
+        .about-section .about-bio::before {
+            content: '\201C';
+            position: absolute;
+            top: 8px;
+            left: 18px;
+            font-size: 56px;
+            color: rgba(0, 212, 255, 0.08);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .about-section .about-bio p {
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-section .about-bio p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-section .about-bio .highlight-text {
+            color: var(--text-accent);
+            font-weight: 500;
+        }
+
+        .about-section .about-bio .kite-icon {
+            display: inline-block;
+            color: var(--text-accent);
+            margin: 0 4px;
+            animation: float-kite 3s ease-in-out infinite;
+        }
+
+        @keyframes float-kite {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+            50% {
+                transform: translateY(-6px) rotate(2deg);
+            }
+        }
+
+        /* 联系方式 */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0 16px;
+        }
+
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem 1.2rem;
-            border-bottom: 1px solid #edf2f7;
-            font-size: 1rem;
+            gap: 14px;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-secondary);
         }
-        .contact-item:last-child {
-            border-bottom: none;
+
+        .contact-item:hover {
+            border-color: rgba(0, 212, 255, 0.15);
+            background: rgba(0, 212, 255, 0.04);
+            transform: translateY(-2px);
+            color: var(--text-primary);
         }
+
         .contact-item i {
-            width: 32px;
-            font-size: 1.3rem;
-            color: #2c5282;
-        }
-        .region-badge {
-            background: #eef2ff;
-            padding: 0.2rem 1rem;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            width: fit-content;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        footer {
+            font-size: 20px;
+            width: 28px;
+            color: var(--text-accent);
             text-align: center;
-            padding: 2rem;
-            color: #6c7a91;
-            font-size: 0.8rem;
-            border-top: 1px solid #e2e8f0;
-            margin-top: 2rem;
         }
 
-        @media (max-width: 800px) {
-            .hero {
+        .contact-item .label {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            display: block;
+        }
+
+        .contact-item .value {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: block;
+        }
+
+        .contact-item .value.small {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px;
+            margin-top: 12px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.12);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .github-link:hover {
+            background: rgba(0, 212, 255, 0.10);
+            border-color: var(--text-accent);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .github-link i {
+            font-size: 22px;
+            color: var(--text-accent);
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 900px) {
+            .app {
                 flex-direction: column;
-                padding: 1.8rem;
+                height: 100vh;
+                overflow: hidden;
             }
-            .hero-left h1 {
-                font-size: 2.2rem;
+
+            .sidebar {
+                width: 100%;
+                min-width: unset;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 14px 20px;
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 212, 255, 0.06);
+                height: auto;
+                max-height: 110px;
+                overflow: visible;
+                backdrop-filter: blur(20px);
+                justify-content: flex-start;
+                align-items: center;
+                gap: 10px 20px;
             }
-            .nav-container {
-                flex-direction: column;
+
+            .sidebar::after {
+                display: none;
+            }
+
+            .avatar-wrapper {
+                width: 56px;
+                height: 56px;
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+
+            .avatar-wrapper .ring {
+                inset: -3px;
+            }
+
+            .sidebar .name {
+                font-size: 18px;
+                letter-spacing: 1px;
+                -webkit-text-fill-color: #fff;
+                background: none;
+                color: #fff;
+            }
+
+            .sidebar .title {
+                font-size: 11px;
+                margin-bottom: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+                width: auto;
+                color: var(--text-secondary);
+            }
+
+            .sidebar .title span {
+                color: var(--text-accent);
+            }
+
+            .nav-menu {
+                flex-direction: row;
+                width: auto;
+                flex: 1 1 auto;
+                gap: 4px;
+                justify-content: flex-end;
+            }
+
+            .nav-item {
+                padding: 8px 14px;
+                font-size: 13px;
+                gap: 8px;
+                border-radius: 10px;
+                white-space: nowrap;
+            }
+
+            .nav-item i {
+                font-size: 15px;
+                width: 18px;
+            }
+
+            .nav-item .indicator {
+                display: none;
+            }
+
+            .sidebar-footer {
+                display: none;
+            }
+
+            .main-content {
+                padding: 24px 20px;
+                flex: 1;
+                overflow-y: auto;
+            }
+
+            .home-hero {
+                min-height: auto;
+                padding: 10px 0;
+            }
+
+            .home-hero h1 {
+                font-size: 34px;
+            }
+
+            .home-hero .subhead {
+                font-size: 17px;
+            }
+
+            .home-hero .tagline {
+                gap: 10px 18px;
+                font-size: 13px;
+            }
+
+            .works-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .work-card {
+                padding: 24px 20px;
+            }
+
+            .about-section .about-bio {
+                padding: 22px 20px;
+                font-size: 15px;
+            }
+
+            .about-section .about-title {
+                font-size: 26px;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .github-link {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                max-height: 96px;
+                padding: 10px 14px;
+                gap: 6px 12px;
+            }
+
+            .avatar-wrapper {
+                width: 44px;
+                height: 44px;
+            }
+
+            .sidebar .name {
+                font-size: 15px;
+            }
+
+            .sidebar .title {
+                font-size: 10px;
+                letter-spacing: 1px;
+            }
+
+            .nav-item {
+                padding: 6px 10px;
+                font-size: 12px;
+                gap: 4px;
+                border-radius: 8px;
+            }
+
+            .nav-item i {
+                font-size: 13px;
+                width: 16px;
+            }
+
+            .main-content {
+                padding: 18px 14px;
+            }
+
+            .home-hero h1 {
+                font-size: 26px;
+            }
+
+            .home-hero .subhead {
+                font-size: 15px;
+            }
+
+            .home-hero .tagline span {
+                font-size: 12px;
+            }
+
+            .about-section .about-title {
+                font-size: 22px;
+            }
+
+            .about-section .about-bio {
+                font-size: 14px;
+                padding: 18px 16px;
+            }
+        }
+
+        /* ===== 工具类 ===== */
+        .section-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 400;
+        }
+
+        .section-label i {
+            color: var(--text-accent);
+            margin-right: 8px;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 60px rgba(0, 212, 255, 0.10);
+        }
+
+        .hide-mobile {
+            display: inline;
+        }
+
+        @media (max-width: 600px) {
+            .hide-mobile {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
 
-<header class="top-nav">
-    <div class="nav-container">
-        <div class="logo">尼天<span> | SECURITY</span></div>
-        <div class="nav-links">
-            <a data-section="home" class="nav-link active">首页</a>
-            <a data-section="projects" class="nav-link">我们的项目</a>
-            <a data-section="about" class="nav-link">关于我们</a>
-        </div>
+    <!-- ===== 粒子背景 ===== -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- ===== 主应用 ===== -->
+    <div class="app">
+
+        <!-- ====== 左侧边栏 ====== -->
+        <aside class="sidebar">
+            <!-- 头像 (请将同文件夹中的图片命名为 avatar.jpg) -->
+            <div class="avatar-wrapper">
+                <div class="ring"></div>
+                <img src="avatar.jpg" alt="封尘 · 创始人" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%230d1628%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%22 y=%22115%22 font-family=%22Inter,sans-serif%22 font-size=%2242%22 fill=%22%2300d4ff%22%3E封%3C/text%3E%3Ctext x=%22115%22 y=%22115%22 font-family=%22Inter,sans-serif%22 font-size=%2242%22 fill=%22%237b5cfc%22%3E尘%3C/text%3E%3C/svg%3E'" />
+            </div>
+
+            <!-- 姓名 + 职位 -->
+            <div class="name">尼天</div>
+            <div class="title"><span>✦</span> 封尘，尼天创始人 <span>✦</span></div>
+
+            <!-- 导航菜单 -->
+            <nav class="nav-menu">
+                <div class="nav-item active" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                    <span class="indicator"></span>
+                </div>
+                <div class="nav-item" data-page="works">
+                    <i class="fas fa-cubes"></i>
+                    <span>作品</span>
+                    <span class="indicator"></span>
+                </div>
+                <div class="nav-item" data-page="about">
+                    <i class="fas fa-user-astronaut"></i>
+                    <span>关于我们</span>
+                    <span class="indicator"></span>
+                </div>
+            </nav>
+
+            <!-- 底部社交链接 -->
+            <div class="sidebar-footer">
+                <a href="#" title="GitHub" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" title="Twitter / X" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="LinkedIn" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </aside>
+
+        <!-- ====== 右侧主内容 ====== -->
+        <main class="main-content">
+
+            <!-- ===== 首页 ===== -->
+            <section class="page active" id="page-home">
+                <div class="home-hero">
+                    <div class="greeting">
+                        <i class="fas fa-terminal"></i> 你好，世界 · 我是封尘
+                    </div>
+                    <h1>封尘，尼天CEO</h1>
+                    <div class="subhead">
+                        <strong>I am 封尘</strong>，封尘,尼天公司的创始人。<br />
+                        以代码为翼，以创新为风，构建智能未来。
+                    </div>
+                    <div class="tagline">
+                        <span><i class="fas fa-microchip"></i> AI 驱动</span>
+                        <span><i class="fas fa-cloud"></i> 云端原生</span>
+                        <span><i class="fas fa-rocket"></i> 前沿探索</span>
+                        <span class="highlight"><i class="fas fa-bolt"></i> 尼天创新驱动 · 科技无界</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 作品 ===== -->
+            <section class="page" id="page-works">
+                <div class="section-label"><i class="fas fa-cube"></i> 核心产品</div>
+                <h2 style="font-size:28px;font-weight:700;margin-bottom:6px;">创新 · 匠心</h2>
+                <p style="color:var(--text-secondary);font-size:15px;margin-bottom:8px;">用技术与想象力，重塑人与智能的交互方式。</p>
+
+                <div class="works-grid">
+                    <!-- 小智 AI -->
+                    <div class="work-card">
+                        <div class="icon"><i class="fas fa-brain"></i></div>
+                        <h3><span>小智</span>AI</h3>
+                        <p>
+                            新一代智能助手，融合大语言模型与多模态感知。
+                            小智 AI 能理解、会思考，在对话中提供精准洞察，
+                            让每一段交互都充满温度与智慧。
+                        </p>
+                        <span class="badge"><i class="fas fa-sparkles"></i> 智能 · 高效</span>
+                    </div>
+
+                    <!-- 尼天 OS -->
+                    <div class="work-card">
+                        <div class="icon"><i class="fas fa-microchip"></i></div>
+                        <h3><span>尼天</span>OS</h3>
+                        <p>
+                            面向未来的智能操作系统，以云原生架构为基座，
+                            融合 AI 能力与边缘计算。尼天 OS 重新定义设备
+                            的智能边界，让万物互联更简单、更强大。
+                        </p>
+                        <span class="badge"><i class="fas fa-cloud-upload-alt"></i> 云 · 边 · 端</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 关于我们 ===== -->
+            <section class="page" id="page-about">
+                <div class="about-section">
+                    <div class="section-label"><i class="fas fa-feather-alt"></i> 关于封尘</div>
+                    <div class="about-title">
+                        <i class="fas fa-quote-left" style="font-size:28px;opacity:0.5;"></i>
+                        破茧 · 乘风
+                    </div>
+
+                    <div class="about-bio">
+                        <p>
+                            <span class="kite-icon"><i class="fas fa-wind"></i></span>
+                            我是 <span class="highlight-text">封尘</span>，一名游弋在数字苍穹下的科技造梦者。
+                            像一只永不断线的 <span class="highlight-text">智能风筝</span>，
+                            我的思维在云端驰骋，代码是牵引我的线，创新是托举我的风。
+                        </p>
+                        <p>
+                            在 <span class="highlight-text">封尘尼天</span>，我带领团队用 <span class="highlight-text">AI</span> 重塑智能边界，
+                            让每一次计算都如同风筝翱翔般自由而精准。
+                            <span class="kite-icon"><i class="fas fa-feather-alt"></i></span>
+                            我们拒绝平庸，致力于将冰冷的代码转化为有温度的智能，
+                            在科技的苍穹下绘制出一幅幅属于未来的蓝图。
+                        </p>
+                        <p>
+                            <span class="highlight-text">「封尘」</span> 二字，寓意着封印平庸，让尘埃落定，
+                            让科技之光穿透迷雾。我们以 <span class="highlight-text">小智AI</span> 为矛，
+                            以 <span class="highlight-text">尼天OS</span> 为盾，
+                            在智能时代的浪潮中破浪前行，永不止步。
+                        </p>
+                    </div>
+
+                    <!-- 联系方式 -->
+                    <div class="contact-grid">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <span class="label">电子邮件</span>
+                                <span class="value">fengchen@nitian.tech</span>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <div>
+                                <span class="label">手机号</span>
+                                <span class="value">+86 138-0000-8888</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GitHub 链接 (get up) -->
+                    <a href="#" class="github-link" target="_blank">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub · 封尘尼天</span>
+                        <i class="fas fa-external-link-alt" style="font-size:14px;opacity:0.6;margin-left:4px;"></i>
+                    </a>
+                </div>
+            </section>
+
+        </main>
     </div>
-</header>
 
-<main class="container">
-    <!-- 首页板块 -->
-    <section id="home-section" class="section active-section">
-        <div class="hero">
-            <div class="hero-left">
-                <h1>尼天 · 智护中原<br><span class="highlight">安全无界 创新无限</span></h1>
-                <div class="hero-desc">
-                    <i class="fas fa-shield-alt" style="margin-right: 8px; color:#2c5282;"></i> 
-                    立足河南，面向全国。尼天以核心技术构筑数字安全屏障，致力成为智能时代基础设施守护者。
-                </div>
-                <button id="discoverAboutBtn" class="btn-solid">
-                    点击我去了解 <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-            <div class="hero-right">
-                <div class="security-animation">
-                    <i class="fas fa-shield-halos shield-icon"></i>
-                    <div class="circle-dot"></div>
-                    <div style="position:absolute; bottom:16px; right:20px; font-size:12px; color:#8f9bb3;">动态防御</div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- ========================================================= -->
+    <!-- ===== 关键修复：JavaScript 导航切换逻辑 ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-    <!-- 项目板块 符合: 小智AI是主要项目之一，尼天OS是核心同名系统，乐天只是子系统 -->
-    <section id="projects-section" class="section">
-        <div class="section-header">
-            <h2>核心产品 · 技术矩阵</h2>
-            <div class="section-sub">自主研发 | 安全基因 | 智能生态</div>
-        </div>
-        <div class="projects-grid">
-            <!-- 小智 AI —— 贵公司主要项目之一 -->
-            <div class="project-card">
-                <div class="project-icon"><i class="fas fa-brain"></i></div>
-                <div class="project-title">小智 AI</div>
-                <div class="project-badge"><i class="fas fa-star"></i> 核心主力项目</div>
-                <div class="project-desc">
-                    新一代企业级认知智能引擎，融合多模态分析与安全大模型，助力中原智造升级。尼天旗舰级AI解决方案。
-                </div>
-                <button class="download-btn" data-link="https://xiaozhi.nitian.com/download" data-new-tab="true">
-                    <i class="fas fa-download"></i> 下载体验
-                </button>
-            </div>
-            <!-- 尼天 OS (与官网同名核心系统) -->
-            <div class="project-card">
-                <div class="project-icon"><i class="fas fa-microchip"></i></div>
-                <div class="project-title">尼天 OS</div>
-                <div class="project-badge"><i class="fas fa-crown"></i> 同名核心系统</div>
-                <div class="project-desc">
-                    尼天自研安全操作系统，高可靠、低延迟，适配全场景基础设施，从底层护航数字世界。
-                </div>
-                <button class="download-btn" data-link="https://os.nitian-official.com/download/latest" data-new-tab="true">
-                    <i class="fas fa-download"></i> 下载 / 试用
-                </button>
-            </div>
-            <!-- 乐天 —— 子公司/子系统定位（尼天公司的子系统） -->
-            <div class="project-card">
-                <div class="project-icon"><i class="fas fa-cloud-moon"></i></div>
-                <div class="project-title">乐天</div>
-                <div class="project-badge"><i class="fas fa-project-diagram"></i> 尼天子系统</div>
-                <div class="project-desc">
-                    乐天轻量级协同工作流平台，是尼天生态中的协作子系统，专为团队效率与云边协同打造。
-                </div>
-                <button class="download-btn" data-link="https://letian.nitian-ecosys.com/portal" data-new-tab="true">
-                    <i class="fas fa-external-link-alt"></i> 访问子系统
-                </button>
-            </div>
-        </div>
-        <!-- 子公司与生态说明：呼应尼天公司拥有子公司体系，中间点展示我们的子公司 -->
-        <div class="subsidiary-note">
-            <i class="fas fa-building"></i> 尼天旗下包含小智AI、尼天OS实验室、乐天事业部等子公司矩阵 · 协同创新
-        </div>
-    </section>
+            // 获取所有导航项和所有页面
+            const navItems = document.querySelectorAll('.nav-item');
+            const pages = {
+                home: document.getElementById('page-home'),
+                works: document.getElementById('page-works'),
+                about: document.getElementById('page-about')
+            };
 
-    <!-- 关于我们 + 联系方式（地区河南 + 加盟/热线统一号码）-->
-    <section id="about-section" class="section">
-        <div class="about-card">
-            <div class="region-badge"><i class="fas fa-map-marker-alt"></i> 中国 · 河南省 尼天集团总部</div>
-            <h2 class="about-title">关于尼天</h2>
-            <p>尼天（NITIAN）成立于2018年，总部位于中国河南省郑州市。作为一家集AI安全、基础软件、智能系统于一体的科技公司，尼天致力于打造自主可靠的技术底座。公司以“立足中原，服务全球”为愿景，旗下拥有小智AI、尼天OS、乐天协作平台等多个明星项目与子公司，赋能千行百业数字化转型。</p>
-            <p>个人介绍：尼天创始人及核心团队深耕网络安全与人工智能领域十余年，坚持核心技术自主研发，以技术驱动商业向善。我们相信开放与共创是科技进步的源动力，目前尼天已在河南、北京设立双研发中心，为超过2000家政企客户提供安全与智能服务。</p>
-            
-            <div class="contact-list">
-                <div class="contact-item">
-                    <i class="fas fa-phone-alt"></i> 
-                    <span><strong>加盟合作 / 官方热线：</strong> 15236976874</span>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i> 
-                    <span><strong>商务邮箱：</strong> 无</span>
-                </div>
-                <div class="contact-item">
-                    <i class="fab fa-weixin"></i> 
-                    <span><strong>官方公众号：</strong> 无</span>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-fax"></i> 
-                    <span><strong>其他联系方式：</strong> 无</span>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-building"></i> 
-                    <span><strong>总部地址：</strong> 中国河南省郑州市郑东新区尼天科技大厦</span>
-                </div>
-            </div>
-            <div style="margin-top: 1.5rem; font-size: 0.85rem; background: #f0f4fa; padding: 1rem; border-radius: 20px;">
-                <i class="fas fa-shield-heart" style="color:#2c5282;"></i> 尼天 —— 让数字世界更坚韧，让智能更可信。
-            </div>
-        </div>
-    </section>
-</main>
+            // 切换页面的函数
+            function setActivePage(pageId) {
+                // 1. 更新导航高亮
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.page === pageId) {
+                        item.classList.add('active');
+                    }
+                });
 
-<footer>
-    <p>© 2026 尼天科技集团（中国·河南） | 安全为本 · 智创中原 | 官方热线：15236976874（加盟/咨询）</p>
-</footer>
-
-<script>
-    (function() {
-        // DOM 元素
-        const homeSection = document.getElementById('home-section');
-        const projectsSection = document.getElementById('projects-section');
-        const aboutSection = document.getElementById('about-section');
-        const navLinks = document.querySelectorAll('.nav-link');
-        
-        function setActiveSection(sectionId) {
-            // 隐藏所有
-            homeSection.classList.remove('active-section');
-            projectsSection.classList.remove('active-section');
-            aboutSection.classList.remove('active-section');
-            if (sectionId === 'home') homeSection.classList.add('active-section');
-            else if (sectionId === 'projects') projectsSection.classList.add('active-section');
-            else if (sectionId === 'about') aboutSection.classList.add('active-section');
-            
-            // 更新导航激活样式
-            navLinks.forEach(link => {
-                const target = link.getAttribute('data-section');
-                if (target === sectionId) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
+                // 2. 更新页面显示
+                Object.keys(pages).forEach(key => {
+                    pages[key].classList.remove('active');
+                });
+                if (pages[pageId]) {
+                    pages[pageId].classList.add('active');
                 }
+            }
+
+            // 为每个导航项绑定点击事件
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    const pageId = this.dataset.page;
+                    if (pageId) {
+                        setActivePage(pageId);
+                    }
+                });
             });
-        }
-        
-        // 导航监听
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetSec = link.getAttribute('data-section');
-                setActiveSection(targetSec);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+
+            // 确保初始状态正确 (默认首页激活)
+            // 如果当前没有激活项，或者激活项不是首页，强制设置首页
+            const activeNav = document.querySelector('.nav-item.active');
+            if (!activeNav || activeNav.dataset.page !== 'home') {
+                setActivePage('home');
+            }
+
+            console.log('✅ 导航切换已修复！点击“作品”和“关于我们”即可正常切换。');
         });
-        
-        // 首页按钮 跳转到 “关于” 界面
-        const discoverBtn = document.getElementById('discoverAboutBtn');
-        if (discoverBtn) {
-            discoverBtn.addEventListener('click', () => {
-                setActiveSection('about');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        }
-        
-        // 所有的下载按钮跳转任意网页 (前两个以及第三个项目都有跳转功能)
-        const downloadButtons = document.querySelectorAll('.download-btn');
-        downloadButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                let url = btn.getAttribute('data-link');
-                // 提供默认回退网址 (任意网页)
-                if (!url || url.trim() === '') {
-                    url = 'https://www.nitian-demo.com/download';
-                }
-                window.open(url, '_blank', 'noopener,noreferrer');
-            });
-        });
-        
-        // 额外确认联系方式：加盟/官方热线已经全部改为15236976874，其他一律显示“无”
-        // 地区 中国河南省 已在关于卡片区域标明。
-        // 项目卡片描述：小智AI是主要项目之一，尼天OS与官网同名，乐天是尼天子系统 —— 完全满足。
-        // 同时中间点是我们的子公司：项目板块底部明确标注了子公司矩阵以及子公司生态。
-        // 首页左边文字不同颜色，右方动画（盾牌动画）实现 
-        // 整体风格类似于火绒安全那种专业可靠的感觉。
-        console.log('尼天官网 | 河南 · 15236976874 | 小智AI主力项目 | 尼天OS同名系统 | 乐天子系统');
-    })();
-</script>
+
+        // ===== 粒子背景动画 (轻量版) =====
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            const PARTICLE_COUNT = 60;
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    r: Math.random() * 1.8 + 0.6,
+                    alpha: Math.random() * 0.5 + 0.1
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x < 0 || p.x > width) p.vx *= -1;
+                    if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0, 212, 255, ${p.alpha})`;
+                    ctx.fill();
+
+                    // 连线
+                    particles.forEach(p2 => {
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 130) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `rgba(0, 212, 255, ${0.06 * (1 - dist / 130)})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    });
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+    </script>
+
 </body>
 </html>
