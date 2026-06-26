@@ -1,631 +1,491 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>📁 本地媒体管理器</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    }
-    body {
-      background: #f5f7fb;
-      min-height: 100vh;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      padding: 12px 18px;
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 24px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-      margin-bottom: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .header h1 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-      color: #1e293b;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .header h1 span {
-      background: #eef2ff;
-      padding: 4px 12px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #4f46e5;
-      margin-left: 6px;
-    }
-    .stats {
-      font-size: 0.85rem;
-      background: #ffffffcc;
-      padding: 6px 14px;
-      border-radius: 30px;
-      color: #334155;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-      border: 1px solid #e9edf2;
-      white-space: nowrap;
-    }
-    .action-btn {
-      background: #1e293b;
-      color: white;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 40px;
-      font-weight: 500;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: 0.15s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-      border: 1px solid #334155;
-      white-space: nowrap;
-    }
-    .action-btn:hover {
-      background: #0f172a;
-      transform: scale(1.01);
-    }
-    .action-btn:active {
-      transform: scale(0.96);
-    }
-    .action-btn.secondary {
-      background: #eef2ff;
-      color: #1e293b;
-      border-color: #cbd5e1;
-    }
-    .action-btn.secondary:hover {
-      background: #e0e7ff;
-    }
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 18px;
-      margin-top: 6px;
-      transition: all 0.2s;
-    }
-    .media-card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-      transition: transform 0.15s ease, box-shadow 0.2s;
-      cursor: pointer;
-      border: 1px solid rgba(226, 232, 240, 0.6);
-      backdrop-filter: blur(2px);
-      display: flex;
-      flex-direction: column;
-    }
-    .media-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-      border-color: #cbd5e1;
-    }
-    .media-card:active {
-      transform: scale(0.97);
-    }
-    .thumbnail {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      background: #f1f5f9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .thumbnail img, 
-    .thumbnail video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .thumbnail .placeholder-icon {
-      font-size: 3.4rem;
-      opacity: 0.4;
-      color: #94a3b8;
-    }
-    .file-info {
-      padding: 12px 12px 14px;
-      background: white;
-    }
-    .file-name {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #0f172a;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-      display: block;
-      margin-bottom: 4px;
-    }
-    .file-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      color: #64748b;
-      letter-spacing: 0.2px;
-    }
-    .file-meta .type-badge {
-      background: #eef2ff;
-      padding: 2px 10px;
-      border-radius: 40px;
-      color: #4338ca;
-      font-weight: 500;
-      font-size: 0.65rem;
-    }
-    .empty-state {
-      grid-column: 1 / -1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 70px 20px;
-      background: white;
-      border-radius: 48px;
-      border: 2px dashed #e2e8f0;
-      color: #64748b;
-      gap: 12px;
-    }
-    .empty-state .big-icon {
-      font-size: 4.5rem;
-      opacity: 0.6;
-    }
-    .empty-state p {
-      font-size: 1rem;
-      max-width: 280px;
-      text-align: center;
-    }
-    .preview-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      padding: 24px;
-      animation: fadeIn 0.2s ease;
-    }
-    .preview-overlay.active {
-      display: flex;
-    }
-    .preview-box {
-      background: #0b1120;
-      border-radius: 32px;
-      max-width: 92vw;
-      max-height: 92vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-    .preview-box img, 
-    .preview-box video {
-      max-width: 100%;
-      max-height: 80vh;
-      border-radius: 24px;
-      display: block;
-      object-fit: contain;
-      background: #00000030;
-    }
-    .preview-close {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(8px);
-      border: none;
-      color: white;
-      font-size: 1.8rem;
-      width: 48px;
-      height: 48px;
-      border-radius: 40px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.15s;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .preview-close:hover {
-      background: rgba(255, 70, 70, 0.25);
-      transform: scale(1.02);
-    }
-    .preview-filename {
-      color: #e2e8f0;
-      font-size: 0.85rem;
-      padding: 12px 8px 4px;
-      text-align: center;
-      max-width: 80%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 400;
-      letter-spacing: 0.2px;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    @media (max-width: 600px) {
-      .grid-container {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 14px;
-      }
-      .header h1 {
-        font-size: 1.1rem;
-      }
-      .stats {
-        font-size: 0.75rem;
-        padding: 4px 12px;
-      }
-      .file-info {
-        padding: 8px 10px 12px;
-      }
-      .header {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .header-left {
-        justify-content: space-between;
-      }
-      .action-btn {
-        justify-content: center;
-        padding: 8px 14px;
-        font-size: 0.8rem;
-      }
-    }
-    .toast {
-      background: #1e293b;
-      color: #f8fafc;
-      padding: 10px 22px;
-      border-radius: 60px;
-      font-size: 0.9rem;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.2);
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-      border: 1px solid #475569;
-      backdrop-filter: blur(6px);
-      opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: none;
-    }
-    .toast.show {
-      opacity: 1;
-    }
-    .hidden-input {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📁 仓库媒体管理器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+        body {
+            background: #f5f7fb;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 20px; background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px); border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04); margin-bottom: 28px;
+            border: 1px solid rgba(255,255,255,0.3);
+            flex-wrap: wrap; gap: 12px;
+        }
+        .header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .header h1 { font-size: 1.4rem; font-weight: 600; color: #1e293b; }
+        .header h1 span {
+            background: #eef2ff; padding: 4px 12px; border-radius: 40px;
+            font-size: 0.8rem; color: #4f46e5; margin-left: 8px;
+        }
+        .stats {
+            font-size: 0.85rem; background: #ffffffcc; padding: 6px 16px;
+            border-radius: 30px; color: #334155; border: 1px solid #e9edf2;
+        }
+        .repo-info {
+            background: #f1f5f9; padding: 6px 16px; border-radius: 40px;
+            font-size: 0.85rem; color: #475569; border: 1px solid #e2e8f0;
+            max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .btn {
+            padding: 8px 20px; border-radius: 40px; border: none;
+            font-weight: 500; font-size: 0.9rem; cursor: pointer;
+            transition: 0.15s; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-primary {
+            background: #1e293b; color: white; border: 1px solid #334155;
+        }
+        .btn-primary:hover { background: #0f172a; transform: scale(1.01); }
+        .btn-secondary {
+            background: #eef2ff; color: #1e293b; border: 1px solid #cbd5e1;
+        }
+        .btn-secondary:hover { background: #e0e7ff; }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 18px;
+        }
+        .media-card {
+            background: white; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04); cursor: pointer;
+            border: 1px solid rgba(226,232,240,0.6);
+            transition: transform 0.15s ease, box-shadow 0.2s;
+        }
+        .media-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+        .media-card:active { transform: scale(0.97); }
+        .thumbnail {
+            width: 100%; aspect-ratio: 1/1;
+            background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; position: relative;
+        }
+        .thumbnail img, .thumbnail video {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+        }
+        .thumbnail .placeholder-icon { font-size: 3rem; opacity: 0.4; color: #94a3b8; }
+        .thumbnail .loading-spinner {
+            width: 40px; height: 40px; border: 4px solid #e2e8f0;
+            border-top: 4px solid #4f46e5; border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .file-info { padding: 10px 12px 14px; background: white; }
+        .file-name {
+            font-size: 0.85rem; font-weight: 500; color: #0f172a;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            display: block; margin-bottom: 4px;
+        }
+        .file-meta { display: flex; justify-content: space-between; font-size: 0.7rem; color: #64748b; }
+        .file-meta .type-badge {
+            background: #eef2ff; padding: 2px 10px; border-radius: 40px;
+            color: #4338ca; font-weight: 500; font-size: 0.65rem;
+        }
+        .empty-state {
+            grid-column: 1 / -1;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 70px 20px; background: white; border-radius: 48px;
+            border: 2px dashed #e2e8f0; color: #64748b; gap: 12px;
+        }
+        .empty-state .big-icon { font-size: 4.5rem; opacity: 0.6; }
+        .preview-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(12px); display: none;
+            align-items: center; justify-content: center; z-index: 999;
+            padding: 24px;
+        }
+        .preview-overlay.active { display: flex; }
+        .preview-box {
+            background: #0b1120; border-radius: 32px;
+            max-width: 92vw; max-height: 92vh;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 12px; box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            position: relative; border: 1px solid rgba(255,255,255,0.06);
+        }
+        .preview-box img, .preview-box video, .preview-box audio {
+            max-width: 100%; max-height: 80vh; border-radius: 24px;
+            object-fit: contain; background: #00000030;
+        }
+        .preview-box audio {
+            width: 80%; margin-top: 20px;
+        }
+        .preview-close {
+            position: absolute; top: 16px; right: 20px;
+            background: rgba(255,255,255,0.1); border: none; color: white;
+            font-size: 1.8rem; width: 48px; height: 48px; border-radius: 40px;
+            cursor: pointer; transition: 0.15s; border: 1px solid rgba(255,255,255,0.08);
+        }
+        .preview-close:hover { background: rgba(255,70,70,0.25); transform: scale(1.02); }
+        .preview-filename {
+            color: #e2e8f0; font-size: 0.85rem; padding: 12px 8px 4px;
+            text-align: center; max-width: 80%;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .toast {
+            background: #1e293b; color: #f8fafc; padding: 10px 22px;
+            border-radius: 60px; font-size: 0.9rem;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            z-index: 9999; border: 1px solid #475569;
+            backdrop-filter: blur(6px); opacity: 0;
+            transition: opacity 0.2s; pointer-events: none;
+        }
+        .toast.show { opacity: 1; }
+        @media (max-width: 600px) {
+            .grid-container { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; }
+            .header h1 { font-size: 1.1rem; }
+            .repo-info { max-width: 150px; font-size: 0.75rem; }
+        }
+    </style>
 </head>
 <body>
-  <div class="header">
+
+<div class="header">
     <div class="header-left">
-      <h1>
-        📂 媒体库
-        <span id="fileCount">0</span>
-      </h1>
-      <div class="stats" id="statsInfo">🖼️ 照片 · 🎬 视频</div>
+        <h1>📁 媒体库 <span id="fileCount">0</span></h1>
+        <div class="stats" id="statsInfo">🖼️ 照片 · 🎬 视频 · 🎵 音频</div>
     </div>
-    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-      <button class="action-btn" id="selectFolderBtn">📂 选择文件夹</button>
-      <button class="action-btn secondary" id="refreshBtn">⟳ 刷新</button>
+    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <span class="repo-info" id="repoDisplay">📂 仓库</span>
+        <button class="btn btn-secondary" id="refreshBtn">⟳ 刷新</button>
     </div>
-  </div>
+</div>
 
-  <div id="mediaGrid" class="grid-container"></div>
+<div id="mediaGrid" class="grid-container"></div>
 
-  <div id="previewOverlay" class="preview-overlay">
+<div id="previewOverlay" class="preview-overlay">
     <div class="preview-box">
-      <button class="preview-close" id="closePreviewBtn">✕</button>
-      <div id="previewContent"></div>
-      <div class="preview-filename" id="previewFilename">文件名</div>
+        <button class="preview-close" id="closePreviewBtn">✕</button>
+        <div id="previewContent"></div>
+        <div class="preview-filename" id="previewFilename">文件名</div>
     </div>
-  </div>
+</div>
 
-  <div id="toastMessage" class="toast">📁 就绪</div>
+<div id="toastMessage" class="toast">📁 就绪</div>
 
-  <!-- 隐藏的 input 用于选择文件夹 -->
-  <input type="file" id="folderInput" class="hidden-input" webkitdirectory multiple accept="image/*,video/*">
+<script>
+(function() {
+    "use strict";
 
-  <script>
-    (function() {
-      "use strict";
+    // DOM
+    const grid = document.getElementById('mediaGrid');
+    const fileCountSpan = document.getElementById('fileCount');
+    const statsInfo = document.getElementById('statsInfo');
+    const overlay = document.getElementById('previewOverlay');
+    const previewContent = document.getElementById('previewContent');
+    const previewFilename = document.getElementById('previewFilename');
+    const closeBtn = document.getElementById('closePreviewBtn');
+    const toast = document.getElementById('toastMessage');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const repoDisplay = document.getElementById('repoDisplay');
 
-      // DOM refs
-      const grid = document.getElementById('mediaGrid');
-      const fileCountSpan = document.getElementById('fileCount');
-      const statsInfo = document.getElementById('statsInfo');
-      const overlay = document.getElementById('previewOverlay');
-      const previewContent = document.getElementById('previewContent');
-      const previewFilename = document.getElementById('previewFilename');
-      const closeBtn = document.getElementById('closePreviewBtn');
-      const toast = document.getElementById('toastMessage');
-      const folderInput = document.getElementById('folderInput');
-      const selectFolderBtn = document.getElementById('selectFolderBtn');
-      const refreshBtn = document.getElementById('refreshBtn');
+    let currentFiles = [];
+    let isLoading = false;
 
-      // 存储当前加载的文件列表 (用于刷新)
-      let currentFileItems = [];
-
-      // Toast
-      let toastTimer = null;
-      function showToast(msg, duration = 2000) {
+    // Toast
+    let toastTimer = null;
+    function showToast(msg, duration = 2000) {
         toast.textContent = msg;
         toast.classList.add('show');
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => {
-          toast.classList.remove('show');
+            toast.classList.remove('show');
         }, duration);
-      }
+    }
 
-      // 获取文件类型 (仅支持主流图片/视频)
-      function getFileType(fileName) {
+    // 文件类型检测 (扩展名)
+    function getFileType(fileName) {
         const ext = fileName.split('.').pop().toLowerCase();
-        // 主流图片: jpg, jpeg, png, gif, bmp, webp, svg, ico, avif
         const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'ico', 'avif', 'tiff', 'tif'];
-        // 主流视频: mp4, webm, mov, avi, mkv, m4v, flv, wmv, 3gp, ogg (视频)
         const videoExts = ['mp4', 'webm', 'mov', 'avi', 'mkv', 'm4v', 'flv', 'wmv', '3gp', 'ogg'];
+        const audioExts = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'wma', 'ogg'];
         if (imageExts.includes(ext)) return 'image';
         if (videoExts.includes(ext)) return 'video';
+        if (audioExts.includes(ext)) return 'audio';
         return 'other';
-      }
+    }
 
-      // 格式化文件大小
-      function formatSize(bytes) {
-        if (bytes === 0) return '0 B';
+    // 格式化大小
+    function formatSize(bytes) {
+        if (!bytes) return '--';
         const k = 1024;
         const sizes = ['B', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        const val = (bytes / Math.pow(k, i)).toFixed(1);
-        return val + ' ' + sizes[i];
-      }
+        return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
+    }
 
-      // 渲染文件卡片
-      function renderFiles(fileItems) {
+    // 从当前 URL 解析 GitHub 仓库信息 (适用于 GitHub Pages)
+    function parseRepoFromURL() {
+        const host = window.location.hostname;
+        const path = window.location.pathname;
+        // 如果是 username.github.io 或 username.github.io/repo
+        if (host.endsWith('github.io')) {
+            const parts = path.split('/').filter(p => p.length > 0);
+            if (parts.length > 0) {
+                // 第一个部分是仓库名
+                const repoName = parts[0];
+                // 用户名从 host 提取
+                const user = host.replace('.github.io', '');
+                return { owner: user, repo: repoName };
+            } else {
+                // 可能是用户主页 (username.github.io) 没有仓库名，无法确定
+                return null;
+            }
+        }
+        return null;
+    }
+
+    // 从 GitHub API 获取文件列表
+    async function fetchGitHubFiles(owner, repo) {
+        try {
+            isLoading = true;
+            showToast('⏳ 正在读取仓库文件...', 3000);
+            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents`;
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                if (response.status === 404) {
+                    showToast('❌ 仓库不存在或为私有', 2500);
+                } else if (response.status === 403) {
+                    showToast('❌ API 限制，请稍后再试', 2500);
+                } else {
+                    showToast(`❌ 错误 ${response.status}: ${response.statusText}`, 2500);
+                }
+                return null;
+            }
+            const data = await response.json();
+            // 过滤出媒体文件
+            const mediaFiles = [];
+            for (const item of data) {
+                if (item.type === 'file') {
+                    const fileType = getFileType(item.name);
+                    if (fileType !== 'other') {
+                        mediaFiles.push({
+                            name: item.name,
+                            path: item.path,
+                            download_url: item.download_url,
+                            size: item.size,
+                            type: fileType,
+                            sha: item.sha
+                        });
+                    }
+                }
+            }
+            if (mediaFiles.length === 0) {
+                showToast('📭 仓库中没有找到媒体文件', 2000);
+                return [];
+            }
+            showToast(`✅ 找到 ${mediaFiles.length} 个媒体文件`, 1500);
+            return mediaFiles;
+        } catch (error) {
+            console.error('Fetch error:', error);
+            showToast('❌ 网络错误，请检查连接', 2000);
+            return null;
+        } finally {
+            isLoading = false;
+        }
+    }
+
+    // 渲染文件卡片
+    function renderFiles(files) {
         grid.innerHTML = '';
-        currentFileItems = fileItems || [];
-
-        if (!fileItems || fileItems.length === 0) {
-          grid.innerHTML = `
-            <div class="empty-state">
-              <div class="big-icon">📁</div>
-              <p><strong>暂无媒体文件</strong><br>点击 “选择文件夹” 加载照片和视频</p>
-            </div>
-          `;
-          fileCountSpan.textContent = '0';
-          statsInfo.textContent = '🖼️ 0 · 🎬 0';
-          return;
+        currentFiles = files || [];
+        if (!files || files.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <div class="big-icon">📂</div>
+                    <p><strong>暂无媒体文件</strong><br>请上传图片、视频或音频文件到仓库根目录</p>
+                </div>
+            `;
+            fileCountSpan.textContent = '0';
+            statsInfo.textContent = '🖼️ 0 · 🎬 0 · 🎵 0';
+            return;
         }
 
-        // 统计
-        let imageCount = 0, videoCount = 0;
-        fileItems.forEach(f => {
-          if (f.type === 'image') imageCount++;
-          else if (f.type === 'video') videoCount++;
+        let imageCount = 0, videoCount = 0, audioCount = 0;
+        files.forEach(f => {
+            if (f.type === 'image') imageCount++;
+            else if (f.type === 'video') videoCount++;
+            else if (f.type === 'audio') audioCount++;
         });
-        fileCountSpan.textContent = fileItems.length;
-        statsInfo.textContent = `🖼️ ${imageCount} · 🎬 ${videoCount}`;
+        fileCountSpan.textContent = files.length;
+        statsInfo.textContent = `🖼️ ${imageCount} · 🎬 ${videoCount} · 🎵 ${audioCount}`;
 
-        // 生成卡片
-        fileItems.forEach((file, index) => {
-          const card = document.createElement('div');
-          card.className = 'media-card';
-          const fileObj = file.file || null;
-          const isImage = file.type === 'image';
-          const isVideo = file.type === 'video';
-          
-          const thumb = document.createElement('div');
-          thumb.className = 'thumbnail';
+        files.forEach((file) => {
+            const card = document.createElement('div');
+            card.className = 'media-card';
+            const isImage = file.type === 'image';
+            const isVideo = file.type === 'video';
+            const isAudio = file.type === 'audio';
 
-          if (fileObj && (isImage || isVideo)) {
-            const url = URL.createObjectURL(fileObj);
+            const thumb = document.createElement('div');
+            thumb.className = 'thumbnail';
+
+            const rawUrl = file.download_url || 
+                `https://raw.githubusercontent.com/${repoInfo.owner}/${repoInfo.repo}/main/${file.path}`;
+
+            // 加载动画
+            const spinner = document.createElement('div');
+            spinner.className = 'loading-spinner';
+            thumb.appendChild(spinner);
+
             if (isImage) {
-              const img = document.createElement('img');
-              img.src = url;
-              img.alt = file.name;
-              img.loading = 'lazy';
-              thumb.appendChild(img);
+                const img = document.createElement('img');
+                img.src = rawUrl;
+                img.alt = file.name;
+                img.loading = 'lazy';
+                img.onload = () => spinner.remove();
+                img.onerror = () => {
+                    spinner.remove();
+                    const icon = document.createElement('div');
+                    icon.className = 'placeholder-icon';
+                    icon.textContent = '🖼️';
+                    thumb.appendChild(icon);
+                };
+                thumb.appendChild(img);
             } else if (isVideo) {
-              const video = document.createElement('video');
-              video.src = url;
-              video.muted = true;
-              video.playsInline = true;
-              video.preload = 'metadata';
-              thumb.appendChild(video);
+                const video = document.createElement('video');
+                video.src = rawUrl;
+                video.muted = true;
+                video.playsInline = true;
+                video.preload = 'metadata';
+                video.onloadeddata = () => spinner.remove();
+                video.onerror = () => {
+                    spinner.remove();
+                    const icon = document.createElement('div');
+                    icon.className = 'placeholder-icon';
+                    icon.textContent = '🎬';
+                    thumb.appendChild(icon);
+                };
+                thumb.appendChild(video);
+            } else if (isAudio) {
+                // 音频显示一个音符图标
+                spinner.remove();
+                const icon = document.createElement('div');
+                icon.className = 'placeholder-icon';
+                icon.textContent = '🎵';
+                thumb.appendChild(icon);
             }
-          } else {
-            const icon = document.createElement('div');
-            icon.className = 'placeholder-icon';
-            icon.textContent = isImage ? '🖼️' : isVideo ? '🎬' : '📄';
-            thumb.appendChild(icon);
-          }
 
-          const info = document.createElement('div');
-          info.className = 'file-info';
-          const nameSpan = document.createElement('span');
-          nameSpan.className = 'file-name';
-          nameSpan.textContent = file.name;
-          const meta = document.createElement('div');
-          meta.className = 'file-meta';
-          const badge = document.createElement('span');
-          badge.className = 'type-badge';
-          badge.textContent = isImage ? '图片' : isVideo ? '视频' : '文件';
-          const sizeSpan = document.createElement('span');
-          sizeSpan.textContent = file.size ? formatSize(file.size) : '--';
-          meta.appendChild(badge);
-          meta.appendChild(sizeSpan);
-          info.appendChild(nameSpan);
-          info.appendChild(meta);
+            const info = document.createElement('div');
+            info.className = 'file-info';
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'file-name';
+            nameSpan.textContent = file.name;
+            const meta = document.createElement('div');
+            meta.className = 'file-meta';
+            const badge = document.createElement('span');
+            badge.className = 'type-badge';
+            badge.textContent = isImage ? '图片' : isVideo ? '视频' : '音频';
+            const sizeSpan = document.createElement('span');
+            sizeSpan.textContent = formatSize(file.size);
+            meta.appendChild(badge);
+            meta.appendChild(sizeSpan);
+            info.appendChild(nameSpan);
+            info.appendChild(meta);
 
-          card.appendChild(thumb);
-          card.appendChild(info);
+            card.appendChild(thumb);
+            card.appendChild(info);
 
-          // 点击预览
-          card.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (fileObj && (isImage || isVideo)) {
-              const url = URL.createObjectURL(fileObj);
-              showPreview(url, file.name, isImage);
-            } else {
-              showToast('无法预览此文件 (请重新选择文件夹)');
-            }
-          });
+            card.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (isImage || isVideo || isAudio) {
+                    showPreview(rawUrl, file.name, isImage, isVideo, isAudio);
+                } else {
+                    showToast('无法预览此文件');
+                }
+            });
 
-          grid.appendChild(card);
+            grid.appendChild(card);
         });
-      }
+    }
 
-      // 预览
-      function showPreview(src, name, isImage) {
+    // 预览
+    function showPreview(src, name, isImage, isVideo, isAudio) {
         previewContent.innerHTML = '';
         previewFilename.textContent = name || '未知文件';
-        
+
         if (isImage) {
-          const img = document.createElement('img');
-          img.src = src;
-          img.alt = name;
-          img.style.maxWidth = '100%';
-          previewContent.appendChild(img);
-        } else {
-          const video = document.createElement('video');
-          video.src = src;
-          video.controls = true;
-          video.autoplay = false;
-          video.style.maxWidth = '100%';
-          video.style.maxHeight = '80vh';
-          video.style.borderRadius = '24px';
-          previewContent.appendChild(video);
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = name;
+            img.style.maxWidth = '100%';
+            previewContent.appendChild(img);
+        } else if (isVideo) {
+            const video = document.createElement('video');
+            video.src = src;
+            video.controls = true;
+            video.autoplay = false;
+            video.style.maxWidth = '100%';
+            video.style.maxHeight = '80vh';
+            video.style.borderRadius = '24px';
+            previewContent.appendChild(video);
+        } else if (isAudio) {
+            const audio = document.createElement('audio');
+            audio.src = src;
+            audio.controls = true;
+            audio.style.width = '80%';
+            audio.style.marginTop = '20px';
+            previewContent.appendChild(audio);
         }
         overlay.classList.add('active');
-      }
+    }
 
-      function closePreview() {
+    function closePreview() {
         overlay.classList.remove('active');
-        const media = previewContent.querySelector('img, video');
-        if (media && media.src && media.src.startsWith('blob:')) {
-          URL.revokeObjectURL(media.src);
-        }
         previewContent.innerHTML = '';
-      }
+    }
 
-      // 关闭按钮 & 点击外部
-      closeBtn.addEventListener('click', closePreview);
-      overlay.addEventListener('click', function(e) {
+    closeBtn.addEventListener('click', closePreview);
+    overlay.addEventListener('click', function(e) {
         if (e.target === overlay) closePreview();
-      });
-      document.addEventListener('keydown', function(e) {
+    });
+    document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closePreview();
-      });
+    });
 
-      // 核心: 处理选择的文件夹
-      function handleFolderSelect(files) {
-        if (!files || files.length === 0) {
-          showToast('未选择任何文件', 1500);
-          renderFiles([]);
-          return;
+    // 主加载逻辑
+    let repoInfo = null;
+
+    async function loadRepository() {
+        if (isLoading) return;
+
+        // 尝试从 URL 解析
+        const parsed = parseRepoFromURL();
+        if (!parsed) {
+            showToast('⚠️ 无法自动识别仓库，请确保通过 GitHub Pages 访问', 3000);
+            repoDisplay.textContent = '⚠️ 未知仓库';
+            renderFiles([]);
+            return;
         }
 
-        const validItems = [];
-        for (let i = 0; i < files.length; i++) {
-          const f = files[i];
-          // 仅当是文件且类型为 image 或 video
-          if (f.type && (f.type.startsWith('image/') || f.type.startsWith('video/'))) {
-            const type = getFileType(f.name);
-            if (type === 'image' || type === 'video') {
-              validItems.push({
-                name: f.name,
-                size: f.size,
-                type: type,
-                file: f,
-              });
-            }
-          }
-        }
+        repoInfo = parsed;
+        repoDisplay.textContent = `${repoInfo.owner}/${repoInfo.repo}`;
 
-        if (validItems.length === 0) {
-          showToast('未找到支持的图片或视频 (jpg, mp4 等)', 2000);
-          renderFiles([]);
-          return;
-        }
-
-        renderFiles(validItems);
-        showToast(`✅ 加载了 ${validItems.length} 个媒体文件`, 2000);
-      }
-
-      // 触发文件夹选择
-      function selectFolder() {
-        folderInput.click();
-      }
-
-      // 刷新: 重新加载当前已选文件夹 (但无法重新获得文件对象, 只能提示重新选择)
-      function refresh() {
-        if (currentFileItems.length > 0) {
-          // 如果有数据, 重新渲染 (但文件对象依然有效)
-          renderFiles(currentFileItems);
-          showToast(`⟳ 刷新完成 (${currentFileItems.length} 个文件)`, 1500);
+        const files = await fetchGitHubFiles(repoInfo.owner, repoInfo.repo);
+        if (files !== null) {
+            renderFiles(files);
         } else {
-          showToast('请先选择文件夹', 1200);
+            renderFiles([]);
         }
-      }
+    }
 
-      // 监听 folderInput 变化
-      folderInput.addEventListener('change', function(e) {
-        const files = e.target.files;
-        if (files && files.length > 0) {
-          handleFolderSelect(files);
-        } else {
-          showToast('未选择任何文件夹', 1200);
-        }
-        // 重置 input 以便重复选择相同文件夹
-        folderInput.value = '';
-      });
+    // 刷新
+    refreshBtn.addEventListener('click', loadRepository);
 
-      // 绑定按钮
-      selectFolderBtn.addEventListener('click', selectFolder);
-      refreshBtn.addEventListener('click', refresh);
+    // 页面加载时自动执行
+    window.addEventListener('load', loadRepository);
 
-      // 初始化: 显示空状态
-      renderFiles([]);
-      showToast('📂 点击 “选择文件夹” 加载媒体', 2500);
+    // 初始显示
+    renderFiles([]);
+    showToast('📁 正在自动加载仓库媒体文件...', 2000);
 
-      // 额外: 如果用户拖拽文件夹? 可扩展, 暂不实现
+})();
+</script>
 
-    })();
-  </script>
 </body>
 </html>
